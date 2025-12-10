@@ -20,6 +20,8 @@ let saving = false;
 let audioCueTimestamp;
 let audioCue = false;
 
+let name;
+
 let use_value = false;
 
 function setup() {
@@ -44,32 +46,39 @@ function setup() {
     });
 
 StartSavebutton = createButton('Start saving data');
+StartSavebutton.position(0, height +10);
 StopSave = createButton('download data');
+StopSave.position(150, height +10);
 
 StartSavebutton.mousePressed(startSaving);
 StopSave.mousePressed(downloadData);
 
 audioCueTimestamp = createButton('audio cue playing');
+audioCueTimestamp.position(300, height +10);
 audioCueTimestamp.mousePressed(()=>{
      audioCue = true;
-    setTimeout(audioCueReset, 10000);// 100 ms pulse
+    setTimeout(audioCueReset, 5000);
 });
-      
+
+name = createInput("Enter Name");
+name.position(15, 60);
+
 }
 
 
 function draw() {
-    background(220);
+    background(255);
 
 
-mapGalvanic =map(sensorValues[0], 450, 600, 0, height/2);
-mapHeartrate =map(sensorValues[1], 0, 1023, 0, height/2);
+// mapGalvanic =map(sensorValues[0], 450, 600, 0, height/2);
+// mapHeartrate =map(sensorValues[1], 0, 1023, 0, height/2);
+console.log(mapGalvanic);
 
-galvanicLog.unshift(mapGalvanic);
+galvanicLog.unshift(sensorValues[0]);
 if (galvanicLog.length > width){
     galvanicLog.pop();}
 
-heartrateLog.unshift (mapHeartrate);
+heartrateLog.unshift (sensorValues[1]);
 if (heartrateLog.length > width){
     heartrateLog.pop();}       
 
@@ -80,13 +89,13 @@ if (heartrateLog.length > width){
     text('Connect serial bridge to device_1', 10, 40);
     text('Connect galvanic sensor to A1 and heartrate to A0', 10, 20);
     text('')
-    fill(0);
-    text(`Galvanic: ${sensorValues[0]}`, 10, 70);
+    fill(0, 0, 255);
+    text(`Galvanic: ${sensorValues[0]}`, 10, 90);
 
     if(sensorValues[1] >900)
         { fill(255,0,0);}
     else {fill(0);}
-    text(`Heartrate: ${sensorValues[1]}`, 10, 90);
+    text(`Heartrate: ${sensorValues[1]}`, 10, 110);
   
   
 
@@ -103,43 +112,36 @@ allData.push({
             "galvanic sensor": sensorValues[0],
             "heart rate": sensorValues[1], 
             "audio cue" : audioCue,
+            "name": name.value(),
             "reading": allData.length + 1 })
 }
 
+stroke(0, 0, 255);
 noFill();
-stroke('blue');
-  beginShape();
-  // starting from the left margin, work towards the right margin
-  for (let i = 0; i < galvanicLog.length; i ++) {
-    if (use_value) {
-      // jiggle our points up and down
-     vertex(i, 200);
-      circle(i, 200, 3);
-    } else {
-      // draw our points directly on a straight line
+beginShape();
 
-         splineVertex(i * 10, 200 + galvanicLog[i]);
-      circle(i * 10, 200 + galvanicLog[i], 3);
-    }
-  }
-  endShape();
+for (let i = 0; i < galvanicLog.length; i++) {
+  let x = i *5
+  let y = map(galvanicLog[i], 400, 800, 100, 250);
+  splineVertex(x, y);
+  circle(x, y, 3);
+}
 
-  stroke('red');
-  beginShape();
-  // starting from the left margin, work towards the right margin
-  for (let i = 0; i < heartrateLog.length ; i ++) {
-    if (use_value) {
-      // jiggle our points up and down
-     vertex(i, 200);
-      circle(i, 200, 3);
-    } else {
-      // draw our points directly on a straight line
+endShape();
 
-         vertex(i * 10, 200 + heartrateLog[i]);
-      circle(i * 10, 200 + heartrateLog[i], 3);
-    }
-  }
-  endShape();
+
+stroke(255, 0, 0);
+noFill();
+beginShape();
+
+for (let i = 0; i < heartrateLog.length; i++) {
+  let x = i*5
+  let y = map(heartrateLog[i], 0, 1023, 100, 250);
+  splineVertex(x, y);
+  circle(x, y, 3);
+}
+
+endShape();
 
 
 }
