@@ -24,9 +24,12 @@ let name;
 
 let use_value = false;
 
-function setup() {
-    createCanvas(400, 400);
+let margin = 10;
+let buttonYpos;
 
+function setup() {
+    createCanvas(windowWidth, windowHeight-50);
+buttonYpos = height - 40;
     // Connect to Serial Bridge
     bridge = new SerialBridge();
 
@@ -46,15 +49,16 @@ function setup() {
     });
 
 StartSavebutton = createButton('Start saving data');
-StartSavebutton.position(0, height +10);
+StartSavebutton.position(margin, buttonYpos);
 StopSave = createButton('download data');
-StopSave.position(150, height +10);
+StopSave.center();
+StopSave.position(width/2, buttonYpos);
 
 StartSavebutton.mousePressed(startSaving);
 StopSave.mousePressed(downloadData);
 
 audioCueTimestamp = createButton('audio cue playing');
-audioCueTimestamp.position(300, height +10);
+audioCueTimestamp.position(width-audioCueTimestamp.width, buttonYpos);
 audioCueTimestamp.mousePressed(()=>{
      audioCue = true;
     setTimeout(audioCueReset, 5000);
@@ -67,11 +71,10 @@ name.position(15, 60);
 
 
 function draw() {
-    background(255);
+    background(0);
 
 
-// mapGalvanic =map(sensorValues[0], 450, 600, 0, height/2);
-// mapHeartrate =map(sensorValues[1], 0, 1023, 0, height/2);
+
 console.log(mapGalvanic);
 
 galvanicLog.unshift(sensorValues[0]);
@@ -94,7 +97,7 @@ if (heartrateLog.length > width){
 
     if(sensorValues[1] >900)
         { fill(255,0,0);}
-    else {fill(0);}
+    else {fill(255);}
     text(`Heartrate: ${sensorValues[1]}`, 10, 110);
   
   
@@ -122,7 +125,7 @@ beginShape();
 
 for (let i = 0; i < galvanicLog.length; i++) {
   let x = i *5
-  let y = map(galvanicLog[i], 400, 800, 100, 250);
+  let y = map(galvanicLog[i], 0, 800, 200, height/2);
   splineVertex(x, y);
   circle(x, y, 3);
 }
@@ -136,7 +139,7 @@ beginShape();
 
 for (let i = 0; i < heartrateLog.length; i++) {
   let x = i*5
-  let y = map(heartrateLog[i], 0, 1023, 100, 250);
+  let y = map(heartrateLog[i], 0, 1023, 200, height/2);
   splineVertex(x, y);
   circle(x, y, 3);
 }
@@ -163,5 +166,9 @@ function downloadData() {
 function audioCueReset(){
     audioCue = false;
 }   
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 
