@@ -62,8 +62,8 @@ function draw() {
     background(220);
 
 
-mapGalvanic =map(sensorValues[0], 450, 600, 0, height);
-mapHeartrate =map(sensorValues[1], 0, 1023, 0, height);
+mapGalvanic =map(sensorValues[0], 450, 600, 0, height/2);
+mapHeartrate =map(sensorValues[1], 0, 1023, 0, height/2);
 
 galvanicLog.unshift(mapGalvanic);
 if (galvanicLog.length > width){
