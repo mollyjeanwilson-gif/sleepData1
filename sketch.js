@@ -28,14 +28,15 @@ let saving = false;
 let audioCueTimestamp;
 let audioCue = false;
 let cueLog = [];
-let cueColors = [
-  [253, 221, 164], // calm
-  [241, 162, 41],  // excitement
-  [213, 108, 80],  // stress
-  [253, 221, 164], // calm
-  [198, 63, 119],  // shock
-  [189, 47, 152]   // happiness
-];
+// let cueColors = [
+// { rgb: [253, 221, 164], duration: 3800 }, // calm
+//   { rgb: [241, 162, 41],  duration: 3000 }, // excitement
+//   { rgb: [213, 108, 80],  duration: 5000 }, // stress
+//   { rgb: [253, 221, 164], duration: 3300 }, // calm
+//   { rgb: [198, 63, 119],  duration: 1500 }, // shock
+//   { rgb: [189, 47, 152],  duration: 4000 }  // happiness
+// ];
+let calm; let excitement; let stress; let shock; let happiness;
 
 let name;
 
@@ -122,13 +123,7 @@ allData.push({
 
 for (let i = 0; i < cueLog.length; i++){
 if (cueLog[i] == true){
-   setInterval(calmColour, 38000);
-   setInterval(excitementColour, 30000);
-   setInterval(stressColour, 50000);
-   setInterval(calmColour, 33000);
-   setInterval(shockColour, 15000);
-   setInterval(happinessColour, 40000);
-
+ fill(cueColours[cueColourNo].rgb);
 }
 else{
     noFill();
@@ -159,9 +154,7 @@ for (let i = 0; i < heartrateLog.length; i++) {
   let y = map(heartrateLog[i], 0, 1023, 200, height/2);
   splineVertex(x, y);
   circle(x, y, 3);
-
-    
-    
+  
 }
 
 endShape();
@@ -211,25 +204,13 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
-function changeColour(){
+// function changeColour(){
+//     cueColourNo++;
 
-}
+//     if (cueColourNo >= cueColors.length){
+// }
 
-function calmColour(){
-   fill(253, 221, 164);
-}
-function excitementColour(){
-   fill(241, 162, 41);
-}
-function stressColour(){
-   fill(213, 108, 80);
-}
-function shockColour(){
-   fill(198, 63, 119);
-}
-function happinessColour(){
-   fill(189,47,152);
-}   
+
 
 //calm 253, 221, 164 38s
 //excitement/anxiety 241, 162, 41 30s
