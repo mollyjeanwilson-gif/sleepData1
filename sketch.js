@@ -1,6 +1,14 @@
 // Serial Bridge Example - Multiple Sensors with JSON
 // This sketch receives MULTIPLE values and stores them in JSON format
 
+
+//calm 253, 221, 164 38s
+//excitement/anxiety 241, 162, 41 30s
+//stress/tension 213, 108, 80 50s
+//calm 253, 221, 164 33s
+//shock/surprise 198, 63, 119 15s
+//happiness 189,47,152 40s
+
 let bridge;
 let sensorValues = [0, 0]; // Array to hold current sensor values
 let allData = []; // Array to store all readings
@@ -19,6 +27,15 @@ let saving = false;
 
 let audioCueTimestamp;
 let audioCue = false;
+let cueLog = [];
+let cueColors = [
+  [253, 221, 164], // calm
+  [241, 162, 41],  // excitement
+  [213, 108, 80],  // stress
+  [253, 221, 164], // calm
+  [198, 63, 119],  // shock
+  [189, 47, 152]   // happiness
+];
 
 let name;
 
@@ -27,11 +44,6 @@ let use_value = false;
 let margin = 10;
 let buttonYpos;
 
-let fear = false; 
-let excitement = false; 
-let stress = false; 
-let surprise = false;
-let calm = false;
 
 function setup() {
     createCanvas(windowWidth, windowHeight-50);
@@ -58,31 +70,19 @@ buttonYpos = height - 40;
 
 StartSavebutton = createButton('Start saving data');
 StartSavebutton.position(margin, buttonYpos);
-StopSave = createButton('download data');
+StopSave = createButton('Download data');
 StopSave.center();
 StopSave.position(width/2, buttonYpos);
-
-fill('white');
-        fear = createButton("fear", false);
-        excitement = createButton('excitement', false);
-        stress = createButton('stress', false);
-        surprise = createButton('surprise', false);
-        calm = createButton('calm', false);
 
 StartSavebutton.mousePressed(startSaving);
 StopSave.mousePressed(downloadData);
 
-audioCueTimestamp = createButton('audio cue playing');
+audioCueTimestamp = createButton('Audio cue playing');
 audioCueTimestamp.position(width-audioCueTimestamp.width, buttonYpos);
+
 audioCueTimestamp.mousePressed(()=>{
      audioCue = true;
-    setTimeout(audioCueReset, 5000);
-
-
-   fear.mousePressed(()=>{
-     audioCue = true;
-    setTimeout(audioCueReset, 5000);
-});
+    setTimeout(audioCueReset, 206000);});
 
 name = createInput("Enter Name");
 name.position(15, 60);
@@ -93,8 +93,6 @@ name.position(15, 60);
 function draw() {
     background(0);
 
-
-
 console.log(mapGalvanic);
 
 galvanicLog.unshift(sensorValues[0]);
@@ -103,31 +101,13 @@ if (galvanicLog.length > width){
 
 heartrateLog.unshift (sensorValues[1]);
 if (heartrateLog.length > width){
-    heartrateLog.pop();}       
+    heartrateLog.pop();} 
+    
+cueLog.unshift (audioCue);
+if (cueLog.length > width){
+    cueLog.pop();}
 
         // Display individual sensor values
-   noStroke();
-        fill(150);
-        textSize(14);
-    text('Connect serial bridge to device_1', 10, 40);
-    text('Connect galvanic sensor to A1 and heartrate to A0', 10, 20);
-    text('')
-    fill(0, 0, 255);
-    text(`Galvanic: ${sensorValues[0]}`, 10, 90);
-
-    if(sensorValues[1] >900)
-        { fill(255,0,0);}
-    else {fill(255);}
-    text(`Heartrate: ${sensorValues[1]}`, 10, 110);
-  
-  
-
-    fill(0);
-    text(`Readings collected: ${allData.length}`, 10, 130);
-    fill(150);
-      text(new Date().toISOString(), 10, 150);
-  
-
 
     if (saving){
 allData.push({
@@ -140,10 +120,25 @@ allData.push({
     })
 }
 
-stroke(0, 0, 255);
+for (let i = 0; i < cueLog.length; i++){
+if (cueLog[i] == true){
+   setInterval(calmColour, 38000);
+   setInterval(excitementColour, 30000);
+   setInterval(stressColour, 50000);
+   setInterval(calmColour, 33000);
+   setInterval(shockColour, 15000);
+   setInterval(happinessColour, 40000);
+
+}
+else{
+    noFill();
+}
+rect(i*5, 0, 5, height);
+}
+
+stroke(255);
 noFill();
 beginShape();
-
 for (let i = 0; i < galvanicLog.length; i++) {
   let x = i *5
   let y = map(galvanicLog[i], 0, 800, 200, height/2);
@@ -154,7 +149,8 @@ for (let i = 0; i < galvanicLog.length; i++) {
 endShape();
 
 
-stroke(255, 0, 0);
+
+stroke(255);
 noFill();
 beginShape();
 
@@ -163,12 +159,35 @@ for (let i = 0; i < heartrateLog.length; i++) {
   let y = map(heartrateLog[i], 0, 1023, 200, height/2);
   splineVertex(x, y);
   circle(x, y, 3);
+
+    
+    
 }
 
 endShape();
 
 
+//display text:
+noStroke();
+        fill(155);
+        textSize(14);
+    text('Connect serial bridge to device_1', 10, 40);
+    text('Connect galvanic sensor to A1 and heartrate to A0', 10, 20);
+    text('')
+    fill(255);
+    text(`Galvanic: ${sensorValues[0]}`, 10, 90);
+
+    text(`Heartrate: ${sensorValues[1]}`, 10, 110);
+    fill(255);
+    text(`Readings collected: ${allData.length}`, 10, 130);
+    fill(150);
+      text(new Date().toISOString(), 10, 150);
+  
 }
+
+
+
+
 
 
 
@@ -192,4 +211,30 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+function changeColour(){
+
+}
+
+function calmColour(){
+   fill(253, 221, 164);
+}
+function excitementColour(){
+   fill(241, 162, 41);
+}
+function stressColour(){
+   fill(213, 108, 80);
+}
+function shockColour(){
+   fill(198, 63, 119);
+}
+function happinessColour(){
+   fill(189,47,152);
+}   
+
+//calm 253, 221, 164 38s
+//excitement/anxiety 241, 162, 41 30s
+//stress/tension 213, 108, 80 50s
+//calm 253, 221, 164 33s
+//shock/surprise 198, 63, 119 15s
+//happiness 189,47,152 40s
 
