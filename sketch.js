@@ -27,6 +27,12 @@ let use_value = false;
 let margin = 10;
 let buttonYpos;
 
+let fear = false; 
+let excitement = false; 
+let stress = false; 
+let surprise = false;
+let calm = false;
+
 function setup() {
     createCanvas(windowWidth, windowHeight-50);
 buttonYpos = height - 40;
@@ -46,6 +52,8 @@ buttonYpos = height - 40;
             sensorValues[i] = parseInt(values[i]);
         }
 
+
+
     });
 
 StartSavebutton = createButton('Start saving data');
@@ -54,12 +62,24 @@ StopSave = createButton('download data');
 StopSave.center();
 StopSave.position(width/2, buttonYpos);
 
+fill('white');
+        fear = createButton("fear", false);
+        excitement = createButton('excitement', false);
+        stress = createButton('stress', false);
+        surprise = createButton('surprise', false);
+        calm = createButton('calm', false);
+
 StartSavebutton.mousePressed(startSaving);
 StopSave.mousePressed(downloadData);
 
 audioCueTimestamp = createButton('audio cue playing');
 audioCueTimestamp.position(width-audioCueTimestamp.width, buttonYpos);
 audioCueTimestamp.mousePressed(()=>{
+     audioCue = true;
+    setTimeout(audioCueReset, 5000);
+
+
+   fear.mousePressed(()=>{
      audioCue = true;
     setTimeout(audioCueReset, 5000);
 });
@@ -114,9 +134,10 @@ allData.push({
             "timestamp": new Date().toISOString(), 
             "galvanic sensor": sensorValues[0],
             "heart rate": sensorValues[1], 
-            "audio cue" : audioCue,
             "name": name.value(),
-            "reading": allData.length + 1 })
+            "reading": allData.length + 1,
+        "audio cue" : audioCue,
+    })
 }
 
 stroke(0, 0, 255);
