@@ -9,6 +9,13 @@
 //shock/surprise 198, 63, 119 15s
 //happiness 189,47,152 40s
 
+//calm 253, 221, 164 38s
+//excitement/anxiety 241, 162, 41 30s
+//stress/tension 213, 108, 80 50s
+//calm 253, 221, 164 33s
+//shock/surprise 198, 63, 119 15s
+//happiness 189,47,152 40s
+
 let bridge;
 let sensorValues = [0, 0]; // Array to hold current sensor values
 let allData = []; // Array to store all readings
@@ -52,7 +59,7 @@ let stressLog = [];
 
 let shockButton;
 let shock = false;
-let ShockLog = [];
+let shockLog = [];
 
 let happinessButton;
 let happiness = false;
@@ -112,35 +119,60 @@ name.position(15, 60);
 calmButton = createButton('Calm');
 calmButton.style('background-color', 'rgb(253, 221, 164)');
 calmButton.style('border-width', "0px");
+calmButton.hide();
 calmButton.mousePressed(() => { emotion = "Calm"
     calm = true; 
+    excitement = false;
+    stress = false;
+    shock = false;
+    happiness = false;
 });
 
 excitementButton = createButton('Excitement');
 excitementButton.style('background-color', 'rgb(241, 162, 41)');
 excitementButton.style('border-width', "0px");
+excitementButton.hide();
 excitementButton.mousePressed(() => { emotion = "Excitement";
     excitement = true;
+      calm = false;
+    stress = false;
+    shock = false;
+    happiness = false;
  });
 
 stressButton = createButton('Stress');
 stressButton.style('background-color', 'rgb(213, 108, 80)');
 stressButton.style('border-width', "0px");
+stressButton.hide();
 stressButton.mousePressed(() => { emotion = "Stress"; 
+    excitement = false;
+      calm = false;
     stress = true;
+    shock = false;
+    happiness = false;
 });
 
 shockButton = createButton('Shock');
 shockButton.style('background-color', 'rgb(198, 63, 119)');
 shockButton.style('border-width', "0px");
+shockButton.hide();
 shockButton.mousePressed(() => { emotion = "Shock";
+  excitement = false;
+      calm = false;
+    stress = false;
     shock = true;
+    happiness = false;
  });
 
 happinessButton = createButton('Happiness');
 happinessButton.style('background-color', 'rgb(189, 47, 152)');
 happinessButton.style('border-width', "0px");
+happinessButton.hide();
 happinessButton.mousePressed(() => { emotion = "Happiness"; 
+   excitement = false;
+      calm = false;
+    stress = false;
+    shock = false;
     happiness = true;
 });
 }
@@ -195,33 +227,6 @@ allData.push({
     })
 }
 
-stroke(255);
-noFill();
-beginShape();
-for (let i = 0; i < galvanicLog.length; i++) {
-  let x = i *5
-  let y = map(galvanicLog[i], 0, 800, 200, height/2);
-  splineVertex(x, y);
-  circle(x, y, 3);
-}
-
-endShape();
-
-
-
-stroke(255);
-noFill();
-beginShape();
-
-for (let i = 0; i < heartrateLog.length; i++) {
-  let x = i*5
-  let y = map(heartrateLog[i], 0, 1023, 200, height/2);
-  splineVertex(x, y);
-  circle(x, y, 3);
-  
-}
-
-endShape();
 
 
 //display text:
@@ -243,13 +248,65 @@ noStroke();
 
       for (let i = 0; i < cueLog.length; i++){
 if (cueLog[i] == true){
- fill(255);
+calmButton.show();
+excitementButton.show();
+stressButton.show();
+shockButton.show();
+happinessButton.show();
+fill(253, 221, 164);
+    if (calmLog[i] == true){
+fill(253, 221, 164);
+    }
+    else if (excitementLog[i] == true) {
+fill(241, 162, 41);
+    }
+    else if (stressLog[i]== true){
+        fill(213, 108, 80);
+    }
+    else if (shockLog[i]== true){
+        fill(198, 63, 119)
+    }
+    else if (happinessLog[i]==true){
+        fill(189,47,152);
+    }
 }
 else{
+// calmButton.hide();
+// excitementButton.hide();
+// stressButton.hide();
+// shockButton.hide();
+// happinessButton.hide();
     noFill();
 }
-rect(i*5, 160, 5, height - 160);
+rect(i*5, 160, 5, height-320);
 }
+
+stroke(255);
+noFill();
+beginShape();
+
+for (let i = 0; i < heartrateLog.length; i++) {
+  let x = i*5
+  let y = map(heartrateLog[i], 0, 1023, 200, height/2);
+  splineVertex(x, y);
+  circle(x, y, 3);
+  
+}
+
+endShape();
+
+stroke(255);
+noFill();
+beginShape();
+for (let i = 0; i < galvanicLog.length; i++) {
+  let x = i *5
+  let y = map(galvanicLog[i], 0, 800, 200, height/2);
+  splineVertex(x, y);
+  circle(x, y, 3);
+}
+
+endShape();
+
   
 }
 
@@ -273,6 +330,12 @@ function downloadData() {
 
 function audioCueReset(){
     audioCue = false;
+    emotion = "";
+    calm = false;
+    excitement = false;
+    stress = false;
+    shock = false;
+    happiness = false;
 }   
 
 function windowResized() {
@@ -280,10 +343,5 @@ function windowResized() {
 }
 
 
-//calm 253, 221, 164 38s
-//excitement/anxiety 241, 162, 41 30s
-//stress/tension 213, 108, 80 50s
-//calm 253, 221, 164 33s
-//shock/surprise 198, 63, 119 15s
-//happiness 189,47,152 40s
+
 
