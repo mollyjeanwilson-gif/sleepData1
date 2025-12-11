@@ -84,14 +84,17 @@ buttonYpos = height - 40;
 StartSavebutton = createButton('Start saving data');
 StartSavebutton.position(margin, buttonYpos);
 StartSavebutton.mousePressed(startSaving);
+StartSavebutton.style("font-family", "VT323");
 
 StopSave = createButton('Download data');
 StopSave.center();
 StopSave.position(width/2, buttonYpos);
 StopSave.mousePressed(downloadData);
+StopSave.style("font-family", "VT323");
 
 audioCueTimestamp = createButton('Audio cue playing');
 audioCueTimestamp.position(width-audioCueTimestamp.width, buttonYpos);
+audioCueTimestamp.style("font-family", "VT323");
 audioCueTimestamp.mousePressed(()=>{
      audioCue = true;
     setTimeout(audioCueReset, 206000);});
@@ -99,11 +102,13 @@ audioCueTimestamp.mousePressed(()=>{
 
 name = createInput("Enter Name");
 name.position(15, 60);
+name.style("font-family","VT323" );
 
 
 calmButton = createButton('Calm');
 calmButton.style('background-color', 'rgb(253, 221, 164)');
 calmButton.style('border-width', "0px");
+calmButton.style("font-family", "VT323");
 calmButton.hide();
 calmButton.mousePressed(() => { emotion = "Calm"
     calm = true; 
@@ -116,6 +121,7 @@ calmButton.mousePressed(() => { emotion = "Calm"
 excitementButton = createButton('Excitement');
 excitementButton.style('background-color', 'rgb(241, 162, 41)');
 excitementButton.style('border-width', "0px");
+excitementButton.style("font-family", "VT323");
 excitementButton.hide();
 excitementButton.mousePressed(() => { emotion = "Excitement";
     excitement = true;
@@ -128,6 +134,7 @@ excitementButton.mousePressed(() => { emotion = "Excitement";
 stressButton = createButton('Stress');
 stressButton.style('background-color', 'rgb(213, 108, 80)');
 stressButton.style('border-width', "0px");
+stressButton.style("font-family", "VT323");
 stressButton.hide();
 stressButton.mousePressed(() => { emotion = "Stress"; 
     excitement = false;
@@ -140,6 +147,7 @@ stressButton.mousePressed(() => { emotion = "Stress";
 shockButton = createButton('Shock');
 shockButton.style('background-color', 'rgb(198, 63, 119)');
 shockButton.style('border-width', "0px");
+shockButton.style("font-family", "VT323");
 shockButton.hide();
 shockButton.mousePressed(() => { emotion = "Shock";
   excitement = false;
@@ -152,6 +160,7 @@ shockButton.mousePressed(() => { emotion = "Shock";
 happinessButton = createButton('Happiness');
 happinessButton.style('background-color', 'rgb(189, 47, 152)');
 happinessButton.style('border-width', "0px");
+happinessButton.style("font-family", "VT323");
 happinessButton.hide();
 happinessButton.mousePressed(() => { emotion = "Happiness"; 
    excitement = false;
@@ -215,6 +224,7 @@ allData.push({
 
 
 //display text:
+textFont("VT323");
 noStroke();
         fill(155);
         textSize(14);
