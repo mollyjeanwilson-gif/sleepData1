@@ -36,7 +36,27 @@ let cueLog = [];
 //   { rgb: [198, 63, 119],  duration: 1500 }, // shock
 //   { rgb: [189, 47, 152],  duration: 4000 }  // happiness
 // ];
-let calm; let excitement; let stress; let shock; let happiness;
+let emotion = "";
+
+let calmButton;
+let calm = false;
+let calmLog = [];
+
+let excitementButton;
+let excitement = false;
+let excitementLog = [];
+
+let stressButton;
+stress = false;
+let stressLog = [];
+
+let shockButton;
+let shock = false;
+let ShockLog = [];
+
+let happinessButton;
+let happiness = false;
+let happinessLog = [];
 
 let name;
 
@@ -71,52 +91,63 @@ buttonYpos = height - 40;
 
 StartSavebutton = createButton('Start saving data');
 StartSavebutton.position(margin, buttonYpos);
+StartSavebutton.mousePressed(startSaving);
+
 StopSave = createButton('Download data');
 StopSave.center();
 StopSave.position(width/2, buttonYpos);
-
-StartSavebutton.mousePressed(startSaving);
 StopSave.mousePressed(downloadData);
 
 audioCueTimestamp = createButton('Audio cue playing');
 audioCueTimestamp.position(width-audioCueTimestamp.width, buttonYpos);
-
 audioCueTimestamp.mousePressed(()=>{
      audioCue = true;
     setTimeout(audioCueReset, 206000);});
+
 
 name = createInput("Enter Name");
 name.position(15, 60);
 
 
-calm = createButton('Calm');
-calm.style('background-color', 'rgb(253, 221, 164)');
-calm.style('border-width', "0px");
+calmButton = createButton('Calm');
+calmButton.style('background-color', 'rgb(253, 221, 164)');
+calmButton.style('border-width', "0px");
+calmButton.mousePressed(() => { emotion = "Calm"
+    calm = true; 
+});
 
-excitement = createButton('Excitement');
-excitement.style('background-color', 'rgb(241, 162, 41)');
-excitement.style('border-width', "0px");
+excitementButton = createButton('Excitement');
+excitementButton.style('background-color', 'rgb(241, 162, 41)');
+excitementButton.style('border-width', "0px");
+excitementButton.mousePressed(() => { emotion = "Excitement";
+    excitement = true;
+ });
 
-stress = createButton('Stress');
-stress.style('background-color', 'rgb(213, 108, 80)');
-stress.style('border-width', "0px");
+stressButton = createButton('Stress');
+stressButton.style('background-color', 'rgb(213, 108, 80)');
+stressButton.style('border-width', "0px");
+stressButton.mousePressed(() => { emotion = "Stress"; 
+    stress = true;
+});
 
-shock = createButton('Shock');
-shock.style('background-color', 'rgb(198, 63, 119)');
-shock.style('border-width', "0px");
+shockButton = createButton('Shock');
+shockButton.style('background-color', 'rgb(198, 63, 119)');
+shockButton.style('border-width', "0px");
+shockButton.mousePressed(() => { emotion = "Shock";
+    shock = true;
+ });
 
-happiness = createButton('Happiness');
-happiness.style('background-color', 'rgb(189, 47, 152)');
-happiness.style('border-width', "0px");
-
-
+happinessButton = createButton('Happiness');
+happinessButton.style('background-color', 'rgb(189, 47, 152)');
+happinessButton.style('border-width', "0px");
+happinessButton.mousePressed(() => { emotion = "Happiness"; 
+    happiness = true;
+});
 }
 
 
 function draw() {
     background(0);
-
-console.log(mapGalvanic);
 
 galvanicLog.unshift(sensorValues[0]);
 if (galvanicLog.length > width){
@@ -130,6 +161,26 @@ cueLog.unshift (audioCue);
 if (cueLog.length > width){
     cueLog.pop();}
 
+calmLog.unshift (calm);
+if (calmLog.length > width){
+    calmLog.pop();}
+
+excitementLog.unshift (excitement);
+if (excitementLog.length > width){
+    excitementLog.pop();}
+
+stressLog.unshift (stress);
+if (stressLog.length > width){
+    stressLog.pop();}
+
+shockLog.unshift (shock);
+if (shockLog.length > width){
+    shockLog.pop();}
+
+happinessLog.unshift (happiness);
+if (happinessLog.length > width){
+    happinessLog.pop();}        
+
         // Display individual sensor values
 
     if (saving){
@@ -139,18 +190,9 @@ allData.push({
             "heart rate": sensorValues[1], 
             "name": name.value(),
             "reading": allData.length + 1,
-        "audio cue" : audioCue,
+            "audio cue" : audioCue,
+            "emotion": emotion
     })
-}
-
-for (let i = 0; i < cueLog.length; i++){
-if (cueLog[i] == true){
- fill(cueColours[cueColourNo].rgb);
-}
-else{
-    noFill();
-}
-rect(i*5, 0, 5, height);
 }
 
 stroke(255);
@@ -197,6 +239,17 @@ noStroke();
     text(`Readings collected: ${allData.length}`, 10, 130);
     fill(150);
       text(new Date().toISOString(), 10, 150);
+
+
+      for (let i = 0; i < cueLog.length; i++){
+if (cueLog[i] == true){
+ fill(255);
+}
+else{
+    noFill();
+}
+rect(i*5, 160, 5, height - 160);
+}
   
 }
 
@@ -225,13 +278,6 @@ function audioCueReset(){
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
-
-// function changeColour(){
-//     cueColourNo++;
-
-//     if (cueColourNo >= cueColors.length){
-// }
-
 
 
 //calm 253, 221, 164 38s
