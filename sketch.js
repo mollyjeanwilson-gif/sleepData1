@@ -88,6 +88,28 @@ audioCueTimestamp.mousePressed(()=>{
 name = createInput("Enter Name");
 name.position(15, 60);
 
+
+calm = createButton('Calm');
+calm.style('background-color', 'rgb(253, 221, 164)');
+calm.style('border-width', "0px");
+
+excitement = createButton('Excitement');
+excitement.style('background-color', 'rgb(241, 162, 41)');
+excitement.style('border-width', "0px");
+
+stress = createButton('Stress');
+stress.style('background-color', 'rgb(213, 108, 80)');
+stress.style('border-width', "0px");
+
+shock = createButton('Shock');
+shock.style('background-color', 'rgb(198, 63, 119)');
+shock.style('border-width', "0px");
+
+happiness = createButton('Happiness');
+happiness.style('background-color', 'rgb(189, 47, 152)');
+happiness.style('border-width', "0px");
+
+
 }
 
 
