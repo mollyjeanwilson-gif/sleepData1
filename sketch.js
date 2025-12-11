@@ -1,14 +1,6 @@
 // Serial Bridge Example - Multiple Sensors with JSON
 // This sketch receives MULTIPLE values and stores them in JSON format
 
-
-//calm 253, 221, 164 38s
-//excitement/anxiety 241, 162, 41 30s
-//stress/tension 213, 108, 80 50s
-//calm 253, 221, 164 33s
-//shock/surprise 198, 63, 119 15s
-//happiness 189,47,152 40s
-
 //calm 253, 221, 164 38s
 //excitement/anxiety 241, 162, 41 30s
 //stress/tension 213, 108, 80 50s
@@ -35,14 +27,7 @@ let saving = false;
 let audioCueTimestamp;
 let audioCue = false;
 let cueLog = [];
-// let cueColors = [
-// { rgb: [253, 221, 164], duration: 3800 }, // calm
-//   { rgb: [241, 162, 41],  duration: 3000 }, // excitement
-//   { rgb: [213, 108, 80],  duration: 5000 }, // stress
-//   { rgb: [253, 221, 164], duration: 3300 }, // calm
-//   { rgb: [198, 63, 119],  duration: 1500 }, // shock
-//   { rgb: [189, 47, 152],  duration: 4000 }  // happiness
-// ];
+
 let emotion = "";
 
 let calmButton;
@@ -271,11 +256,6 @@ fill(241, 162, 41);
     }
 }
 else{
-// calmButton.hide();
-// excitementButton.hide();
-// stressButton.hide();
-// shockButton.hide();
-// happinessButton.hide();
     noFill();
 }
 rect(i*5, 160, 5, height-320);
