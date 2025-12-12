@@ -229,7 +229,7 @@ noStroke();
         fill(155);
         textSize(14);
     text('Connect serial bridge to device_1', 10, 40);
-    text('Connect galvanic sensor to A1 and heartrate to A0', 10, 20);
+    text('Connect galvanic sensor to A0 and heartrate to A1', 10, 20);
     text('')
     fill(255);
     text(`Galvanic: ${sensorValues[0]}`, 10, 90);
