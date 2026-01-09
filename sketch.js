@@ -7,10 +7,14 @@
 //calm 253, 221, 164 33s
 //shock/surprise 198, 63, 119 15s
 //happiness 189,47,152 40s
+//colour values for the emotional states
 
+//setting up variables
 let bridge;
-let sensorValues = [0, 0]; // Array to hold current sensor values
-let allData = []; // Array to store all readings
+let sensorValues = [0, 0]; 
+// Array to hold current sensor values
+let allData = []; 
+// Array to store all readings
 
 
 let mapGalvanic;
@@ -59,8 +63,11 @@ let buttonYpos;
 
 
 function setup() {
-    createCanvas(windowWidth, windowHeight-50);
+
+    
+createCanvas(windowWidth, windowHeight-50);
 buttonYpos = height - 40;
+    
     // Connect to Serial Bridge
     bridge = new SerialBridge();
 
@@ -72,7 +79,7 @@ buttonYpos = height - 40;
         // Split the data by comma
         let values = data.split(",");
 
-        // Loop through and convert all values to numbers
+        // Loop through  data and convert all values to real numbers
         for (let i = 0; i < values.length; i++) {
             sensorValues[i] = parseInt(values[i]);
         }
@@ -81,6 +88,7 @@ buttonYpos = height - 40;
 
     });
 
+//set up buttons to start saving and download JSON
 StartSavebutton = createButton('Start saving data');
 StartSavebutton.position(margin, buttonYpos);
 StartSavebutton.mousePressed(startSaving);
@@ -92,19 +100,23 @@ StopSave.position(width/2, buttonYpos);
 StopSave.mousePressed(downloadData);
 StopSave.style("font-family", "VT323");
 
+//audio cue button makes audio cue true for 206s (the length of the audio track)
 audioCueTimestamp = createButton('Audio cue playing');
 audioCueTimestamp.position(width-audioCueTimestamp.width, buttonYpos);
 audioCueTimestamp.style("font-family", "VT323");
 audioCueTimestamp.mousePressed(()=>{
      audioCue = true;
     setTimeout(audioCueReset, 206000);});
+//setTimeout means the audioCueReset happens after 206000 milliseconds
 
-
+//input name
 name = createInput("Enter Name");
 name.position(15, 60);
 name.style("font-family","VT323" );
 
 
+//buttons for emotions, in the colours we chose for each emotion
+//when one emotion is pressed it becomes true (in the JSON) the other ones become false
 calmButton = createButton('Calm');
 calmButton.style('background-color', 'rgb(253, 221, 164)');
 calmButton.style('border-width', "0px");
@@ -175,6 +187,8 @@ happinessButton.mousePressed(() => { emotion = "Happiness";
 function draw() {
     background(0);
 
+//going through the data (sensorValues[0] is galvanic) and [1] is heartrate
+//unshift adds the new data to the front of the array rather than the end so that the graph can appear to roll across the screen
 galvanicLog.unshift(sensorValues[0]);
 if (galvanicLog.length > width){
     galvanicLog.pop();}
@@ -207,8 +221,10 @@ happinessLog.unshift (happiness);
 if (happinessLog.length > width){
     happinessLog.pop();}        
 
-        // Display individual sensor values
+//save JSON
+// if save button is pressed saving=true
 
+    
     if (saving){
 allData.push({
             "timestamp": new Date().toISOString(), 
@@ -223,7 +239,8 @@ allData.push({
 
 
 
-//display text:
+//display text, with reminders about how to set up the experement as we kept connecting the sensors to the wrong pins
+    
 textFont("VT323");
 noStroke();
         fill(155);
@@ -238,9 +255,9 @@ noStroke();
     fill(255);
     text(`Readings collected: ${allData.length}`, 10, 130);
     fill(150);
-      text(new Date().toISOString(), 10, 150);
+    text(new Date().toISOString(), 10, 150);
 
-
+//the emotion buttons only show when the audio cue button is pressed
       for (let i = 0; i < cueLog.length; i++){
 if (cueLog[i] == true){
 calmButton.show();
@@ -248,6 +265,9 @@ excitementButton.show();
 stressButton.show();
 shockButton.show();
 happinessButton.show();
+
+    //a block of colour comes on screen when each emotion is pressed
+    //the fill colour is dictated by the emotion
 fill(253, 221, 164);
     if (calmLog[i] == true){
 fill(253, 221, 164);
@@ -271,6 +291,13 @@ else{
 rect(i*5, 160, 5, height-320);
 }
 
+//draws the data in a graph
+// uses what we have been unshifing into each log
+// for loop to go through each value
+// space between each value is 5
+// remapped to fit the screen
+// spline vertex simply creates a curve  between the points
+    
 stroke(255);
 noFill();
 beginShape();
@@ -285,6 +312,8 @@ for (let i = 0; i < heartrateLog.length; i++) {
 
 endShape();
 
+// repeats the same with the galvanic data
+    
 stroke(255);
 noFill();
 beginShape();
@@ -302,14 +331,17 @@ endShape();
 
 
 
+// other functions:
 
 
-
-
+//makes the saving button turn saving to true when pressed
 function startSaving(){
     saving = true;
 }
 
+//i should have changed the name of the json file this caused issues - i just kept reworking old code
+//this saves the data and sends a message to console to dbl check
+//resets saving to false
 function downloadData() {
     saving = false;
     if (allData.length > 0) { // Only download if we have data
@@ -318,6 +350,7 @@ function downloadData() {
     }
 }
 
+//does what it says , makes all emotions false, audio cue is not playing, no emotion being tried to be evoked
 function audioCueReset(){
     audioCue = false;
     emotion = "";
